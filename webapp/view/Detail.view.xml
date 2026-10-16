@@ -1,4 +1,6 @@
+
 <mvc:View
+    id="detailView"
     controllerName="etudiant14.sap.training.helloworld.controller.Detail"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
@@ -11,114 +13,309 @@
     <uxap:ObjectPageLayout id="detailPage" upperCaseAnchorBar="false">
 
         <uxap:headerTitle>
-            <uxap:ObjectPageDynamicHeaderTitle>
+            <uxap:ObjectPageDynamicHeaderTitle id="detailHeaderTitle">
                 <uxap:breadcrumbs>
-                    <Breadcrumbs currentLocationText="{d>/c/CustomerName}">
+                    <Breadcrumbs
+                        id="detailBreadcrumbs"
+                        currentLocationText="{d>/c/CustomerName}">
                         <links>
-                            <Link text="{i18n>navDashboard}" press=".onNav('RouteDashboard')"/>
-                            <Link text="{i18n>navBookings}" press=".onNav('RouteBookings')"/>
+                            <Link
+                                id="detailDashboardLink"
+                                text="{i18n>navDashboard}"
+                                press=".onNav('RouteDashboard')"/>
+                            <Link
+                                id="detailBookingsLink"
+                                text="{i18n>navBookings}"
+                                press=".onNav('RouteBookings')"/>
                         </links>
                     </Breadcrumbs>
                 </uxap:breadcrumbs>
-                <uxap:heading><Title text="{d>/c/Form} {d>/c/CustomerName}"/></uxap:heading>
-                <uxap:expandedContent><Text text="{d>/c/City}, {d>/c/Country}"/></uxap:expandedContent>
+
+                <uxap:heading>
+                    <Title
+                        id="detailCustomerTitle"
+                        text="{d>/c/Form} {d>/c/CustomerName}"/>
+                </uxap:heading>
+
+                <uxap:expandedContent>
+                    <Text
+                        id="detailCustomerLocation"
+                        text="{d>/c/City}, {d>/c/Country}"/>
+                </uxap:expandedContent>
+
                 <uxap:actions>
-                    <Button icon="sap-icon://nav-back" text="Back" type="Transparent" press=".onNavBack"/>
+                    <Button
+                        id="detailBackButton"
+                        icon="sap-icon://nav-back"
+                        text="Back"
+                        type="Transparent"
+                        press=".onNavBack"/>
                 </uxap:actions>
             </uxap:ObjectPageDynamicHeaderTitle>
         </uxap:headerTitle>
 
         <uxap:headerContent>
-            <HBox alignItems="Center" wrap="Wrap">
-                <Avatar initials="{d>/initials}" displaySize="L" backgroundColor="Accent6" class="sapUiSmallMarginEnd"/>
-                <VBox class="sapUiMediumMarginEnd">
-                    <ObjectAttribute title="{i18n>customerNumberTitle}" text="{d>/c/CustomerNumber}"/>
-                    <Label text="{i18n>emailTitle}"/>
-                    <Link text="{d>/c/Email}" href="{= 'mailto:' + ${d>/c/Email} }"/>
+            <HBox id="detailHeaderContent" alignItems="Center" wrap="Wrap">
+                <Avatar
+                    id="detailAvatar"
+                    initials="{d>/initials}"
+                    displaySize="L"
+                    backgroundColor="Accent6"
+                    class="sapUiSmallMarginEnd"/>
+
+                <VBox id="detailContactBox" class="sapUiMediumMarginEnd">
+                    <ObjectAttribute
+                        id="detailCustomerNumber"
+                        title="{i18n>customerNumberTitle}"
+                        text="{d>/c/CustomerNumber}"/>
+
+                    <Label id="detailEmailLabel" text="{i18n>emailTitle}"/>
+                    <Link
+                        id="detailEmailLink"
+                        text="{d>/c/Email}"
+                        href="{= 'mailto:' + ${d>/c/Email} }"/>
                 </VBox>
-                <VBox class="sapUiMediumMarginEnd">
-                    <Label text="{i18n>discountTitle}"/>
-                    <NumericContent value="{d>/c/Discount}" scale="%" withMargin="false" truncateValueTo="5"/>
+
+                <VBox id="detailDiscountBox" class="sapUiMediumMarginEnd">
+                    <Label id="detailDiscountLabel" text="{i18n>discountTitle}"/>
+                    <NumericContent
+                        id="detailDiscount"
+                        value="{d>/c/Discount}"
+                        scale="%"
+                        withMargin="false"
+                        truncateValueTo="5"/>
                 </VBox>
-                <VBox class="sapUiMediumMarginEnd">
-                    <Label text="{i18n>bookingsLabel}"/>
-                    <ObjectNumber number="{d>/n}" emphasized="true"/>
+
+                <VBox id="detailBookingsBox" class="sapUiMediumMarginEnd">
+                    <Label id="detailBookingsLabel" text="{i18n>bookingsLabel}"/>
+                    <ObjectNumber
+                        id="detailBookingsNumber"
+                        number="{d>/n}"
+                        emphasized="true"/>
                 </VBox>
-                <VBox>
-                    <Label text="{i18n>cancellationRateLabel}"/>
-                    <ProgressIndicator width="12rem" percentValue="{d>/rate}"
-                                       displayValue="{d>/rate} %" state="{d>/rateState}"/>
+
+                <VBox id="detailCancellationBox">
+                    <Label
+                        id="detailCancellationLabel"
+                        text="{i18n>cancellationRateLabel}"/>
+                    <ProgressIndicator
+                        id="detailCancellationRate"
+                        width="12rem"
+                        percentValue="{d>/rate}"
+                        displayValue="{d>/rate} %"
+                        state="{d>/rateState}"/>
                 </VBox>
             </HBox>
         </uxap:headerContent>
 
         <uxap:sections>
+
             <!-- Informations générales -->
-            <uxap:ObjectPageSection title="{i18n>generalInformation}">
-                <uxap:subSections><uxap:ObjectPageSubSection><uxap:blocks>
-                    <form:SimpleForm editable="false" layout="ColumnLayout" columnsM="2" columnsL="2" columnsXL="2">
-                        <core:Title text="{i18n>addressDataFormContainerTitle}"/>
-                        <Label text="{i18n>streetTitle}"/><Text text="{d>/c/Street}"/>
-                        <Label text="{i18n>postcodeTitle}"/><Text text="{d>/c/PostCode}"/>
-                        <Label text="{i18n>cityTitle}"/><Text text="{d>/c/City}"/>
-                        <Label text="{i18n>countryTitle}"/><Text text="{d>/c/Country}"/>
-                        <core:Title text="{i18n>contactDataFormContainerTitle}"/>
-                        <Label text="{i18n>emailTitle}"/><Link text="{d>/c/Email}" href="{= 'mailto:' + ${d>/c/Email} }"/>
-                        <Label text="{i18n>phoneTitle}"/><Link text="{d>/c/Telephone}" href="{= 'tel:' + ${d>/c/Telephone} }"/>
-                    </form:SimpleForm>
-                </uxap:blocks></uxap:ObjectPageSubSection></uxap:subSections>
+            <uxap:ObjectPageSection
+                id="generalInformationSection"
+                title="{i18n>generalInformation}">
+
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection id="generalInformationSubSection">
+                        <uxap:blocks>
+                            <form:SimpleForm
+                                id="customerInformationForm"
+                                editable="false"
+                                layout="ColumnLayout"
+                                columnsM="2"
+                                columnsL="2"
+                                columnsXL="2">
+
+                                <core:Title
+                                    id="addressFormTitle"
+                                    text="{i18n>addressDataFormContainerTitle}"/>
+
+                                <Label id="detailStreetLabel" text="{i18n>streetTitle}"/>
+                                <Text id="detailStreetText" text="{d>/c/Street}"/>
+
+                                <Label id="postcodeLabel" text="{i18n>postcodeTitle}"/>
+                                <Text id="postcodeText" text="{d>/c/PostCode}"/>
+
+                                <Label id="detailCityLabel" text="{i18n>cityTitle}"/>
+                                <Text id="detailCityText" text="{d>/c/City}"/>
+
+                                <Label id="detailCountryLabel" text="{i18n>countryTitle}"/>
+                                <Text id="detailCountryText" text="{d>/c/Country}"/>
+
+                                <core:Title
+                                    id="contactFormTitle"
+                                    text="{i18n>contactDataFormContainerTitle}"/>
+
+                                <Label id="formEmailLabel" text="{i18n>emailTitle}"/>
+                                <Link
+                                    id="formEmailLink"
+                                    text="{d>/c/Email}"
+                                    href="{= 'mailto:' + ${d>/c/Email} }"/>
+
+                                <Label id="phoneLabel" text="{i18n>phoneTitle}"/>
+                                <Link
+                                    id="phoneLink"
+                                    text="{d>/c/Telephone}"
+                                    href="{= 'tel:' + ${d>/c/Telephone} }"/>
+
+                            </form:SimpleForm>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
             </uxap:ObjectPageSection>
 
-            <!-- Réservations du client, filtrables par statut -->
-            <uxap:ObjectPageSection title="{i18n>bookingsTitle}">
-                <uxap:subSections><uxap:ObjectPageSubSection><uxap:blocks>
-                    <IconTabBar id="statusTabs" select=".onTabSelect" expandable="false" applyContentPadding="false">
-                        <items>
-                            <IconTabFilter key="all" showAll="true" count="{d>/n}" text="{i18n>statusAll}"/>
-                            <IconTabSeparator/>
-                            <IconTabFilter key="active" icon="sap-icon://accept" iconColor="Positive" count="{d>/active}" text="{i18n>statusActive}"/>
-                            <IconTabFilter key="cancelled" icon="sap-icon://sys-cancel-2" iconColor="Negative" count="{d>/cancelled}" text="{i18n>statusCancelled}"/>
-                        </items>
-                        <content>
-                            <Table items="{d>/shown}" growing="true" growingThreshold="10">
-                                <columns>
-                                    <Column><Text text="{i18n>bookingColumn}"/></Column>
-                                    <Column><Text text="{i18n>airlineColumnHeader}"/></Column>
-                                    <Column><Text text="{i18n>fldateColumnHeader}"/></Column>
-                                    <Column minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>classColumnHeader}"/></Column>
-                                    <Column hAlign="End"><Text text="{i18n>amountColumn}"/></Column>
-                                    <Column><Text text="{i18n>cancellationColumnHeader}"/></Column>
-                                </columns>
+            <!-- Réservations du client -->
+            <uxap:ObjectPageSection
+                id="customerBookingsSection"
+                title="{i18n>bookingsTitle}">
+
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection id="customerBookingsSubSection">
+                        <uxap:blocks>
+
+                            <IconTabBar
+                                id="statusTabs"
+                                select=".onTabSelect"
+                                expandable="false"
+                                applyContentPadding="false">
+
                                 <items>
-                                    <ColumnListItem>
-                                        <cells>
-                                            <ObjectIdentifier title="{d>BookingNumber}"/>
-                                            <Text text="{d>AirlineID} {d>ConnectionNumber}"/>
-                                            <Text text="{path: 'd>FlightDate', type: 'sap.ui.model.type.Date', formatOptions: {source: {pattern: 'yyyy-MM-dd'}, style: 'medium'}}"/>
-                                            <Text text="{path: 'd>Class', formatter: 'formatter.classText'}"/>
-                                            <ObjectNumber number="{parts: ['d>Amount', 'd>ForeignCurrency'], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false}}"
-                                                          unit="{d>ForeignCurrency}"/>
-                                            <ObjectStatus text="{= ${d>Cancelled} ? ${i18n>statusCancelled} : ${i18n>statusActive} }"
-                                                          state="{= ${d>Cancelled} ? 'Error' : 'Success' }"/>
-                                        </cells>
-                                    </ColumnListItem>
+                                    <IconTabFilter
+                                        id="allBookingsTab"
+                                        key="all"
+                                        showAll="true"
+                                        count="{d>/n}"
+                                        text="{i18n>statusAll}"/>
+
+                                    <IconTabSeparator id="bookingTabsSeparator"/>
+
+                                    <IconTabFilter
+                                        id="activeBookingsTab"
+                                        key="active"
+                                        icon="sap-icon://accept"
+                                        iconColor="Positive"
+                                        count="{d>/active}"
+                                        text="{i18n>statusActive}"/>
+
+                                    <IconTabFilter
+                                        id="cancelledBookingsTab"
+                                        key="cancelled"
+                                        icon="sap-icon://sys-cancel-2"
+                                        iconColor="Negative"
+                                        count="{d>/cancelled}"
+                                        text="{i18n>statusCancelled}"/>
                                 </items>
-                            </Table>
-                        </content>
-                    </IconTabBar>
-                </uxap:blocks></uxap:ObjectPageSubSection></uxap:subSections>
+
+                                <content>
+                                    <Table
+                                        id="customerBookingsTable"
+                                        items="{d>/shown}"
+                                        growing="true"
+                                        growingThreshold="10">
+
+                                        <columns>
+                                            <Column id="bookingNumberColumn">
+                                                <Text
+                                                    id="bookingNumberColumnText"
+                                                    text="{i18n>bookingColumn}"/>
+                                            </Column>
+
+                                            <Column id="airlineColumn">
+                                                <Text
+                                                    id="airlineColumnText"
+                                                    text="{i18n>airlineColumnHeader}"/>
+                                            </Column>
+
+                                            <Column id="detailFlightDateColumn">
+                                                <Text
+                                                    id="flightDateColumnText"
+                                                    text="{i18n>fldateColumnHeader}"/>
+                                            </Column>
+
+                                            <Column
+                                                id="classColumn"
+                                                minScreenWidth="Tablet"
+                                                demandPopin="true">
+                                                <Text
+                                                    id="classColumnText"
+                                                    text="{i18n>classColumnHeader}"/>
+                                            </Column>
+
+                                            <Column id="amountColumn" hAlign="End">
+                                                <Text
+                                                    id="amountColumnText"
+                                                    text="{i18n>amountColumn}"/>
+                                            </Column>
+
+                                            <Column id="detailCancellationColumn">
+                                                <Text
+                                                    id="cancellationColumnText"
+                                                    text="{i18n>cancellationColumnHeader}"/>
+                                            </Column>
+                                        </columns>
+
+                                        <items>
+                                            <ColumnListItem id="customerBookingRow">
+                                                <cells>
+                                                    <ObjectIdentifier
+                                                        id="bookingNumberIdentifier"
+                                                        title="{d>BookingNumber}"/>
+
+                                                    <Text
+                                                        id="bookingAirlineText"
+                                                        text="{d>AirlineID} {d>ConnectionNumber}"/>
+
+                                                    <Text
+                                                        id="bookingFlightDateText"
+                                                        text="{path: 'd>FlightDate', type: 'sap.ui.model.type.Date', formatOptions: {source: {pattern: 'yyyy-MM-dd'}, style: 'medium'}}"/>
+
+                                                    <Text
+                                                        id="bookingClassText"
+                                                        text="{path: 'd>Class', formatter: 'formatter.classText'}"/>
+
+                                                    <ObjectNumber
+                                                        id="bookingAmountNumber"
+                                                        number="{parts: [{path: 'd>Amount'}, {path: 'd>ForeignCurrency'}], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false}}"
+                                                        unit="{d>ForeignCurrency}"/>
+
+                                                    <ObjectStatus
+                                                        id="bookingCancellationStatus"
+                                                        text="{= ${d>Cancelled} ? ${i18n>statusCancelled} : ${i18n>statusActive} }"
+                                                        state="{= ${d>Cancelled} ? 'Error' : 'Success' }"/>
+                                                </cells>
+                                            </ColumnListItem>
+                                        </items>
+                                    </Table>
+                                </content>
+                            </IconTabBar>
+
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
             </uxap:ObjectPageSection>
 
             <!-- Compagnies utilisées -->
-            <uxap:ObjectPageSection title="{i18n>airlinesSection}">
-                <uxap:subSections><uxap:ObjectPageSubSection><uxap:blocks>
-                    <List items="{d>/airlines}">
-                        <StandardListItem icon="sap-icon://flight" title="{d>id}"
-                                          description="{= ${i18n>cancelledCount}.replace('{0}', ${d>cancelled}) }"
-                                          info="{d>total}" infoState="Information"/>
-                    </List>
-                </uxap:blocks></uxap:ObjectPageSubSection></uxap:subSections>
+            <uxap:ObjectPageSection
+                id="customerAirlinesSection"
+                title="{i18n>airlinesSection}">
+
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection id="customerAirlinesSubSection">
+                        <uxap:blocks>
+                            <List id="customerAirlinesList" items="{d>/airlines}">
+                                <StandardListItem
+                                    id="customerAirlineItem"
+                                    icon="sap-icon://flight"
+                                    title="{d>id}"
+                                    description="{= ${i18n>cancelledCount}.replace('{0}', ${d>cancelled}) }"
+                                    info="{d>total}"
+                                    infoState="Information"/>
+                            </List>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
             </uxap:ObjectPageSection>
+
         </uxap:sections>
     </uxap:ObjectPageLayout>
 </mvc:View>
