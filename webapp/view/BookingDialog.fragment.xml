@@ -1,0 +1,36 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form">
+
+    <Dialog title="{i18n>bookingDialogTitle} {sel>/BookingNumber}" contentWidth="22rem">
+        <form:SimpleForm editable="false" layout="ResponsiveGridLayout"
+                         labelSpanXL="12" labelSpanL="12" labelSpanM="12" labelSpanS="12"
+                         emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0"
+                         columnsXL="1" columnsL="1" columnsM="1">
+            <Label text="{i18n>customerColumn}"/>
+            <Text text="{sel>/Customer}"/>
+            <Label text="{i18n>airlineColumnHeader}"/>
+            <Text text="{sel>/AirlineID} {sel>/ConnectionNumber}"/>
+            <Label text="{i18n>fldateColumnHeader}"/>
+            <Text text="{path: 'sel>/FlightDate', type: 'sap.ui.model.type.Date', formatOptions: {source: {pattern: 'yyyy-MM-dd'}, style: 'long'}}"/>
+            <Label text="{i18n>bookingDateLabel}"/>
+            <Text text="{path: 'sel>/BookingDate', type: 'sap.ui.model.type.Date', formatOptions: {source: {pattern: 'yyyy-MM-dd'}, style: 'long'}}"/>
+            <Label text="{i18n>classColumnHeader}"/>
+            <Text text="{= ${sel>/Class} === 'C' ? ${i18n>flightClassC} : ${sel>/Class} === 'F' ? ${i18n>flightClassF} : ${i18n>flightClassY} }"/>
+            <Label text="{i18n>amountColumn}"/>
+            <ObjectNumber number="{parts: ['sel>/Amount', 'sel>/ForeignCurrency'], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false}}"
+                          unit="{sel>/ForeignCurrency}"/>
+            <Label text="{i18n>cancellationColumnHeader}"/>
+            <ObjectStatus text="{= ${sel>/Cancelled} ? ${i18n>statusCancelled} : ${i18n>statusActive} }"
+                          state="{= ${sel>/Cancelled} ? 'Error' : 'Success' }"/>
+        </form:SimpleForm>
+        <beginButton>
+            <Button text="{i18n>cancelBookingButton}" icon="sap-icon://sys-cancel-2" type="Reject"
+                    enabled="{= !${sel>/Cancelled} }" press=".onCancelBooking"/>
+        </beginButton>
+        <endButton>
+            <Button text="{i18n>closeButton}" press=".onCloseDialog"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,25 @@
+specVersion: "4.0"
+metadata:
+  name: etudiant14.sap.training.helloworld
+type: application
+
+server:
+  customMiddleware:
+    - name: fiori-tools-proxy
+      afterMiddleware: compression
+      configuration:
+        ignoreCertErrors: false
+        ui5:
+          path:
+            - /resources
+            - /test-resources
+          url: https://ui5.sap.com
+
+    - name: sap-fe-mockserver
+      beforeMiddleware: csp
+      configuration:
+        service:
+          urlPath: /odata/
+          metadataXmlPath: ./webapp/localService/metadata.xml
+          mockdataRootPath: ./webapp/localService/data
+          generateMockData: false

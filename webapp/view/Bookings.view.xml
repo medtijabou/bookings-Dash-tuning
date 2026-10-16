@@ -1,0 +1,91 @@
+<mvc:View
+    controllerName="etudiant14.sap.training.helloworld.controller.Bookings"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    core:require="{formatter: 'etudiant14/sap/training/helloworld/model/formatter'}"
+    displayBlock="true">
+
+    <f:DynamicPage id="bookingsPage" toggleHeaderOnTitleClick="false">
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading><Title text="{i18n>bookingsTitle}"/></f:heading>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <f:header>
+            <f:DynamicPageHeader pinnable="true">
+                <HBox wrap="Wrap" alignItems="End">
+                    <VBox class="sapUiSmallMarginEnd">
+                        <Label text="{i18n>airlineFilter}" labelFor="fAirline"/>
+                        <ComboBox id="fAirline" width="12rem" items="{b>/airlines}">
+                            <core:Item key="{b>k}" text="{b>k}"/>
+                        </ComboBox>
+                    </VBox>
+                    <VBox class="sapUiSmallMarginEnd">
+                        <Label text="{i18n>classFilter}" labelFor="fClass"/>
+                        <Select id="fClass" width="12rem">
+                            <core:Item key="" text="{i18n>statusAll}"/>
+                            <core:Item key="C" text="{i18n>flightClassC}"/>
+                            <core:Item key="Y" text="{i18n>flightClassY}"/>
+                            <core:Item key="F" text="{i18n>flightClassF}"/>
+                        </Select>
+                    </VBox>
+                    <VBox class="sapUiSmallMarginEnd">
+                        <Label text="{i18n>flightDateFilter}" labelFor="fDate"/>
+                        <DateRangeSelection id="fDate" width="16rem"/>
+                    </VBox>
+                    <VBox class="sapUiSmallMarginEnd">
+                        <Label text="{i18n>statusFilter}" labelFor="fStatus"/>
+                        <SegmentedButton id="fStatus" selectedKey="all">
+                            <items>
+                                <SegmentedButtonItem key="all" text="{i18n>statusAll}"/>
+                                <SegmentedButtonItem key="active" text="{i18n>statusActive}"/>
+                                <SegmentedButtonItem key="cancelled" text="{i18n>statusCancelled}"/>
+                            </items>
+                        </SegmentedButton>
+                    </VBox>
+                    <Button text="{i18n>goButton}" type="Emphasized" press=".onGo" class="sapUiTinyMarginEnd"/>
+                    <Button text="{i18n>resetButton}" press=".onReset"/>
+                </HBox>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <f:content>
+            <Table id="bookingsTable" items="{b>/view}" growing="true" growingThreshold="100"
+                   sticky="ColumnHeaders,HeaderToolbar" class="sapUiSmallMargin" width="auto">
+                <headerToolbar>
+                    <Toolbar>
+                        <Title text="{= ${i18n>bookingsTitle} + ' (' + ${b>/count} + ')' }"/>
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                    <Column><Text text="{i18n>bookingColumn}"/></Column>
+                    <Column><Text text="{i18n>customerColumn}"/></Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>airlineColumnHeader}"/></Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>fldateColumnHeader}"/></Column>
+                    <Column minScreenWidth="Desktop" demandPopin="true"><Text text="{i18n>classColumnHeader}"/></Column>
+                    <Column hAlign="End"><Text text="{i18n>amountColumn}"/></Column>
+                    <Column><Text text="{i18n>cancellationColumnHeader}"/></Column>
+                </columns>
+                <items>
+                    <ColumnListItem type="Navigation" press=".onRowPress">
+                        <cells>
+                            <Text text="{b>BookingNumber}"/>
+                            <Link text="{b>Customer}" press=".onCustomer"/>
+                            <Text text="{b>AirlineID} {b>ConnectionNumber}"/>
+                            <Text text="{path: 'b>FlightDate', type: 'sap.ui.model.type.Date', formatOptions: {source: {pattern: 'yyyy-MM-dd'}, style: 'medium'}}"/>
+                            <Text text="{path: 'b>Class', formatter: 'formatter.classText'}"/>
+                            <ObjectNumber number="{parts: ['b>Amount', 'b>ForeignCurrency'], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false}}"
+                                          unit="{b>ForeignCurrency}"/>
+                            <ObjectStatus text="{= ${b>Cancelled} ? ${i18n>statusCancelled} : ${i18n>statusActive} }"
+                                          state="{= ${b>Cancelled} ? 'Error' : 'Success' }"
+                                          icon="{= ${b>Cancelled} ? 'sap-icon://sys-cancel-2' : 'sap-icon://accept' }"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </f:content>
+    </f:DynamicPage>
+</mvc:View>

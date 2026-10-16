@@ -1,0 +1,44 @@
+<mvc:View
+    controllerName="etudiant14.sap.training.helloworld.controller.Dashboard"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    displayBlock="true">
+
+    <Page id="dashboardPage" title="{i18n>dashboardTitle}" showHeader="true">
+        <headerContent>
+            <Button icon="sap-icon://refresh" type="Transparent" press=".onRefresh"/>
+        </headerContent>
+        <content>
+            <HBox wrap="Wrap" class="sapUiSmallMargin">
+                <GenericTile class="dashTile" header="{i18n>tileCustomers}" subheader="{i18n>tileCustomersSub}" press=".onTile('RouteOverview')">
+                    <TileContent><NumericContent value="{k>/customers}" icon="sap-icon://customer" withMargin="false"/></TileContent>
+                </GenericTile>
+                <GenericTile class="dashTile" header="{i18n>tileBookings}" subheader="{i18n>tileBookingsSub}" press=".onTile('RouteBookings')">
+                    <TileContent><NumericContent value="{k>/bookings}" icon="sap-icon://flight" withMargin="false"/></TileContent>
+                </GenericTile>
+                <GenericTile class="dashTile" header="{i18n>tileCancelled}" subheader="{i18n>tileCancelledSub}">
+                    <TileContent><NumericContent value="{k>/cancelled}" icon="sap-icon://cancel" valueColor="Error" withMargin="false"/></TileContent>
+                </GenericTile>
+                <GenericTile class="dashTile" header="{i18n>tileRate}" subheader="{i18n>tileRateSub}">
+                    <TileContent><NumericContent value="{k>/rate}" scale="%" indicator="Up" valueColor="Critical" withMargin="false"/></TileContent>
+                </GenericTile>
+            </HBox>
+
+            <l:Grid defaultSpan="XL6 L6 M12 S12" class="sapUiSmallMarginBeginEnd" vSpacing="0.5">
+                <Panel class="dashPanel" headerText="{i18n>chartCountry}">
+                    <VBox id="boxCountry"/>
+                </Panel>
+                <Panel class="dashPanel" headerText="{i18n>chartCustomer}">
+                    <VBox id="boxCustomer"/>
+                </Panel>
+                <Panel class="dashPanel" headerText="{i18n>chartMonth}">
+                    <VBox id="boxMonth"/>
+                </Panel>
+                <Panel class="dashPanel" headerText="{i18n>chartAirline}">
+                    <VBox id="boxAirline"/>
+                </Panel>
+            </l:Grid>
+        </content>
+    </Page>
+</mvc:View>

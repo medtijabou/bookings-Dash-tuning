@@ -1,0 +1,33 @@
+<mvc:View
+    controllerName="etudiant14.sap.training.helloworld.controller.App"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:tnt="sap.tnt"
+    displayBlock="true"
+    height="100%">
+
+    <tnt:ToolPage id="toolPage">
+        <tnt:header>
+            <tnt:ToolHeader>
+                <Button icon="sap-icon://menu2" type="Transparent" press=".onToggleMenu">
+                    <layoutData><OverflowToolbarLayoutData priority="NeverOverflow"/></layoutData>
+                </Button>
+                <Title text="{i18n>title}" level="H1"/>
+                <ToolbarSpacer/>
+                <Avatar initials="SB" displaySize="XS" backgroundColor="Accent8"/>
+            </tnt:ToolHeader>
+        </tnt:header>
+        <tnt:sideContent>
+            <tnt:SideNavigation id="sideNav" selectedKey="dashboard" itemSelect=".onItemSelect">
+                <tnt:NavigationList>
+                    <tnt:NavigationListItem text="{i18n>navDashboard}" icon="sap-icon://business-objects-experience" key="dashboard"/>
+                    <tnt:NavigationListItem text="{i18n>navCustomers}" icon="sap-icon://customer" key="customers"/>
+                    <tnt:NavigationListItem text="{i18n>navBookings}" icon="sap-icon://flight" key="bookings"/>
+                </tnt:NavigationList>
+            </tnt:SideNavigation>
+        </tnt:sideContent>
+        <tnt:mainContents>
+            <App id="app"/>
+        </tnt:mainContents>
+    </tnt:ToolPage>
+</mvc:View>

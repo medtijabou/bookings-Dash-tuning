@@ -1,0 +1,178 @@
+{
+  "_version": "1.37.0",
+  "sap.app": {
+    "id": "etudiant14.sap.training.helloworld",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.33.0",
+      "toolsId": "3411db2a-bd13-4088-9451-b6bdbf302817"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "handleValidation": true,
+    "dependencies": {
+      "minUI5Version": "1.96.34",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.f": {},
+        "sap.uxap": {},
+        "sap.tnt": {},
+        "sap.viz": {},
+        "sap.ui.layout": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "": {
+        "dataSource": "mainService",
+        "type": "sap.ui.model.odata.v4.ODataModel",
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "etudiant14.sap.training.helloworld.i18n.i18n",
+          "supportedLocales": [
+            ""
+          ],
+          "fallbackLocale": ""
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "async": true,
+        "viewPath": "etudiant14.sap.training.helloworld.view",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "clearControlAggregation": false,
+        "bypassed": {
+          "target": [
+            "TargetNotFound"
+          ]
+        }
+      },
+      "routes": [
+        {
+          "name": "RouteDashboard",
+          "pattern": "",
+          "target": [
+            "TargetDashboard"
+          ]
+        },
+        {
+          "name": "RouteOverview",
+          "pattern": "customers",
+          "target": [
+            "TargetOverview"
+          ]
+        },
+        {
+          "name": "RouteBookings",
+          "pattern": "bookings",
+          "target": [
+            "TargetBookings"
+          ]
+        },
+        {
+          "name": "RouteDetail",
+          "pattern": "detail/{customerId}",
+          "target": [
+            "TargetDetail"
+          ]
+        }
+      ],
+      "targets": {
+        "TargetOverview": {
+          "viewId": "Overview",
+          "viewName": "Overview",
+          "viewLevel": 1,
+          "transition": "show"
+        },
+        "TargetDetail": {
+          "viewId": "Detail",
+          "viewName": "Detail",
+          "viewLevel": 2,
+          "transition": "slide"
+        },
+        "TargetNotFound": {
+          "viewId": "NotFound",
+          "viewName": "NotFound",
+          "transition": "show"
+        },
+        "TargetDashboard": {
+          "viewId": "Dashboard",
+          "viewName": "Dashboard",
+          "viewLevel": 1,
+          "transition": "show"
+        },
+        "TargetBookings": {
+          "viewId": "Bookings",
+          "viewName": "Bookings",
+          "viewLevel": 1,
+          "transition": "show"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "etudiant14.sap.training.helloworld.view.App",
+      "type": "XML",
+      "async": true,
+      "id": "App"
+    }
+  }
+}

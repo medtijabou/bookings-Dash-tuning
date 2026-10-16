@@ -1,0 +1,448 @@
+
+<mvc:View
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    controllerName="etudiant14.sap.training.helloworld.controller.Overview"
+    displayBlock="true"
+    core:require="{formatter: 'etudiant14/sap/training/helloworld/model/formatter'}">
+
+    <!-- ===================================================== -->
+    <!-- PAGE PRINCIPALE DE L'APPLICATION -->
+    <!-- ===================================================== -->
+    <Page id="overviewPage" title="{i18n>overviewPageTitle}">
+        <content>
+
+            <!-- ===================================================== -->
+            <!-- PANNEAU CLIENT : ADAPTATION AU TÉLÉPHONE -->
+            <!-- ===================================================== -->
+            <Panel
+                id="customerPanel"
+                headerText="{i18n>customerPanelHeader}"
+                expandable="true"
+                expanded="{= !${device>/system/phone} }"
+                class="sapUiResponsiveMargin"
+                width="auto">
+
+                <content>
+
+                    <!-- ===================================================== -->
+                    <!-- FORMULAIRE DE CRÉATION D'UN CLIENT -->
+                    <!-- ===================================================== -->
+                    <f:SimpleForm
+                        id="customerForm"
+                        layout="ColumnLayout"
+                        editable="true">
+
+                        <!-- Barre d'outils et bouton de création -->
+                        <f:toolbar>
+                            <Toolbar id="customerToolbar">
+                                <content>
+                                    <ToolbarSpacer id="customerToolbarSpacer"/>
+
+                                    <!-- Bouton ouvrant le dialogue client -->
+                                    <Button
+                                        id="createCustomerButton"
+                                        icon="sap-icon://create"
+                                        text="{i18n>newCustomerButtonText}"
+                                        press=".onSave"
+                                        enabled="{= ${customer>/CustomerName} !== undefined &amp;&amp; ${customer>/CustomerName}.length > 0 }"/>
+                                </content>
+                            </Toolbar>
+                        </f:toolbar>
+
+                        <f:content>
+
+                            <!-- ===================================================== -->
+                            <!-- GROUPE 1 : INFORMATIONS GÉNÉRALES -->
+                            <!-- ===================================================== -->
+                            <core:Title
+                                id="generalDataTitle"
+                                text="{i18n>generalDataFormContainerTitle}"/>
+
+                            <!-- Type de formulaire -->
+                            <Label
+                                id="formLabel"
+                                text="{i18n>formLabelText}"/>
+                            <Input
+                                id="formInput"
+                                value="{customer>/Form}"/>
+
+                            <!-- Nom du client -->
+                            <Label
+                                id="customerNameLabel"
+                                text="{i18n>nameLabelText}"/>
+                            <Input
+                                id="customerNameInput"
+                                value="{customer>/CustomerName}"
+                                valueLiveUpdate="true"/>
+
+                            <!-- Remise : valeur entière comprise entre 0 et 100 -->
+                            <Label
+                                id="discountLabel"
+                                text="{i18n>discountLabelText}"/>
+                            <Input
+                                id="discountInput"
+                                value="{
+                                    path: 'customer>/Discount',
+                                    type: 'sap.ui.model.type.Integer',
+                                    constraints: {
+                                        minimum: 0,
+                                        maximum: 100
+                                    }
+                                }"/>
+
+                            <!-- ===================================================== -->
+                            <!-- GROUPE 2 : ADRESSE DU CLIENT -->
+                            <!-- ===================================================== -->
+                            <core:Title
+                                id="addressDataTitle"
+                                text="{i18n>addressDataFormContainerTitle}"/>
+
+                            <!-- Rue -->
+                            <Label
+                                id="streetLabel"
+                                text="{i18n>streetLabelText}"/>
+                            <Input
+                                id="streetInput"
+                                value="{customer>/Street}"/>
+
+                            <!-- Code postal -->
+                            <Label
+                                id="postCodeLabel"
+                                text="{i18n>postcodeLabelText}"/>
+                            <Input
+                                id="postCodeInput"
+                                value="{customer>/PostCode}"/>
+
+                            <!-- Ville -->
+                            <Label
+                                id="cityLabel"
+                                text="{i18n>cityLabelText}"/>
+                            <Input
+                                id="cityInput"
+                                value="{customer>/City}"/>
+
+                            <!-- Pays -->
+                            <Label
+                                id="countryLabel"
+                                text="{i18n>countryLabelText}"/>
+                            <Input
+                                id="countryInput"
+                                value="{customer>/Country}"/>
+
+                            <!-- ===================================================== -->
+                            <!-- GROUPE 3 : COORDONNÉES DU CLIENT -->
+                            <!-- ===================================================== -->
+                            <core:Title
+                                id="contactDataTitle"
+                                text="{i18n>contactDataFormContainerTitle}"/>
+
+                            <!-- Adresse email -->
+                            <Label
+                                id="emailLabel"
+                                text="{i18n>emailLabelText}"/>
+                            <Input
+                                id="emailInput"
+                                value="{customer>/Email}"/>
+
+                            <!-- Numéro de téléphone -->
+                            <Label
+                                id="telephoneLabel"
+                                text="{i18n>phoneLabelText}"/>
+                            <Input
+                                id="telephoneInput"
+                                value="{customer>/Telephone}"/>
+
+                        </f:content>
+                    </f:SimpleForm>
+
+                    <!-- ===================================================== -->
+                    <!-- TABLEAU DES CLIENTS -->
+                    <!-- Liste, sélection, tri et recherche -->
+                    <!-- ===================================================== -->
+                    <Table
+                        id="customerTable"
+                        class="customerTableResponsive"
+                        mode="SingleSelectLeft"
+                        selectionChange=".onCustomerChange"
+                        items="{
+    path: '/UX_Customer',
+    parameters: {
+        $orderby: 'CustomerNumber'
+    }
+}"
+                        growing="true"
+                        growingThreshold="10">
+
+                        <!-- Barre de titre et recherche -->
+                        <headerToolbar>
+                            <Toolbar id="customerHeaderToolbar">
+                                <Title
+                                    id="customerTableTitle"
+                                    text="{i18n>customerTableHeader}"/>
+                                <ToolbarSpacer id="customerSearchToolbarSpacer"/>
+
+                                <!-- Recherche par nom du client -->
+                                <SearchField
+                                    id="customerSearchField"
+                                    width="40%"
+                                    search=".onFilterCustomers"/>
+                            </Toolbar>
+                        </headerToolbar>
+
+                        <!-- Colonnes du tableau des clients -->
+                        <columns>
+
+                            <!-- Numéro du client -->
+                            <Column id="customerNumberColumn">
+                                <Text
+                                    id="customerNumberHeader"
+                                    text="{i18n>customerNumberColumnHeader}"/>
+                            </Column>
+
+                            <!-- Nom du client -->
+                            <Column id="customerNameColumn">
+                                <Text
+                                    id="customerNameHeader"
+                                    text="{i18n>nameLabelText}"/>
+                            </Column>
+
+                            <!-- Rue -->
+                            <Column
+                                id="customerStreetColumn"
+                                minScreenWidth="Desktop">
+                                <Text
+                                    id="customerStreetHeader"
+                                    text="{i18n>streetLabelText}"/>
+                            </Column>
+
+                            <!-- Code postal -->
+                            <Column
+                                id="customerPostCodeColumn"
+                                minScreenWidth="Desktop">
+                                <Text
+                                    id="customerPostCodeHeader"
+                                    text="{i18n>postcodeLabelText}"/>
+                            </Column>
+
+                            <!-- Ville -->
+                            <Column
+                                id="customerCityColumn"
+                                minScreenWidth="Desktop">
+                                <Text
+                                    id="customerCityHeader"
+                                    text="{i18n>cityLabelText}"/>
+                            </Column>
+
+                            <!-- Pays -->
+                            <Column
+                                id="customerCountryColumn"
+                                minScreenWidth="Tablet">
+                                <Text
+                                    id="customerCountryHeader"
+                                    text="{i18n>countryLabelText}"/>
+                            </Column>
+                            
+                            <Column id="customerDetailsColumn" width="3rem">
+                                <Text id="customerDetailsHeader" text=""/>
+                            </Column>
+
+                        </columns>
+
+                        <!-- Lignes contenant les données des clients -->
+                        <items>
+                            <ColumnListItem id="customerRow">
+                                <cells>
+
+                                    <!-- Numéro du client -->
+                                    <Text
+                                        id="customerNumberCell"
+                                        text="{CustomerNumber}"/>
+
+                                    <!-- Nom du client -->
+                                    <Text
+                                        id="customerNameCell"
+                                        text="{CustomerName}"/>
+
+                                    <!-- Rue -->
+                                    <Text
+                                        id="customerStreetCell"
+                                        text="{Street}"/>
+
+                                    <!-- Code postal -->
+                                    <Text
+                                        id="customerPostCodeCell"
+                                        text="{PostCode}"/>
+
+                                    <!-- Ville -->
+                                    <Text
+                                        id="customerCityCell"
+                                        text="{City}"/>
+
+                                    <!-- Pays -->
+                                    <Text
+                                        id="customerCountryCell"
+                                        text="{Country}"/>
+
+                                    <Button
+                                        id="customerDetailsButton"
+                                        icon="sap-icon://navigation-right-arrow"
+                                        type="Transparent"
+                                        press=".onShowCustomerDetails"/>
+
+
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+
+                    <!-- ===================================================== -->
+                    <!-- TABLEAU DES RÉSERVATIONS DU CLIENT SÉLECTIONNÉ -->
+                    <!-- ===================================================== -->
+                    <Table
+                        id="bookingTable"
+                        headerText="{i18n>bookingTableHeader}"
+                        items="{_Bookings}"
+                        growing="true"
+                        growingThreshold="5"
+                        class="sapUiResponsiveMargin"
+                        width="auto">
+
+                        <!-- Colonnes des réservations -->
+                        <columns>
+
+                            <!-- Identifiant de la compagnie aérienne -->
+                            <Column id="airlineIdColumn">
+                                <header>
+                                    <Text
+                                        id="airlineIdHeader"
+                                        text="{i18n>airlineColumnHeader}"/>
+                                </header>
+                            </Column>
+
+                            <!-- Numéro de connexion du vol -->
+                            <Column id="connectionNumberColumn">
+                                <header>
+                                    <Text
+                                        id="connectionNumberHeader"
+                                        text="{i18n>connectionColumnHeader}"/>
+                                </header>
+                            </Column>
+
+                            <!-- Date du vol -->
+                            <Column id="flightDateColumn">
+                                <header>
+                                    <Text
+                                        id="flightDateHeader"
+                                        text="{i18n>fldateColumnHeader}"/>
+                                </header>
+                            </Column>
+
+                            <!-- Classe du billet -->
+                            <Column
+                                id="bookingClassColumn"
+                                minScreenWidth="Desktop"
+                                demandPopin="true">
+                                <header>
+                                    <Text
+                                        id="bookingClassHeader"
+                                        text="{i18n>classColumnHeader}"/>
+                                </header>
+                            </Column>
+
+                            <!-- Paiement en devise étrangère -->
+                            <Column
+                                id="paymentColumn"
+                                minScreenWidth="Tablet"
+                                demandPopin="true">
+                                <header>
+                                    <Text
+                                        id="paymentHeader"
+                                        text="{i18n>paymentColumnHeader}"/>
+                                </header>
+                            </Column>
+
+                            <!-- Statut d'annulation -->
+                            <Column
+                                id="cancellationColumn"
+                                minScreenWidth="Tablet"
+                                demandPopin="true">
+                                <header>
+                                    <Text
+                                        id="cancellationHeader"
+                                        text="{i18n>cancellationColumnHeader}"/>
+                                </header>
+                            </Column>
+
+                        </columns>
+
+                        <!-- Lignes contenant les réservations -->
+                        <items>
+                            <ColumnListItem id="bookingRow">
+                                <cells>
+
+                                    <!-- Compagnie aérienne -->
+                                    <ObjectIdentifier
+                                        id="airlineIdCell"
+                                        title="{AirlineID}"/>
+
+                                    <!-- Numéro de connexion -->
+                                    <ObjectIdentifier
+                                        id="connectionNumberCell"
+                                        title="{ConnectionNumber}"/>
+
+                                    <!-- Date formatée selon les paramètres SAPUI5 -->
+                                    <ObjectIdentifier
+                                        id="flightDateCell"
+                                        title="{
+                                            path: 'FlightDate',
+                                            type: 'sap.ui.model.type.Date',
+                                            formatOptions: {
+                                                source: {
+                                                    pattern: 'yyyy-MM-dd'
+                                                },
+                                                style: 'medium'
+                                            }
+                                        }"/>
+
+                                    <!-- Classe traduite par le formatter.js -->
+                                    <Text
+                                        id="bookingClassCell"
+                                        text="{
+                                            path: 'Class',
+                                            formatter: 'formatter.classText'
+                                        }"/>
+
+                                    <!-- Montant et devise du paiement -->
+                                    <ObjectNumber
+                                        id="paymentCell"
+                                        number="{
+                                            parts: [
+                                                {path: 'ForeignCurrencyPayment'},
+                                                {path: 'ForeignCurrency'}
+                                            ],
+                                            type: 'sap.ui.model.type.Currency',
+                                            formatOptions: {
+                                                showMeasure: false
+                                            }
+                                        }"
+                                        unit="{ForeignCurrency}"/>
+
+                                    <!-- Texte indiquant si le vol est annulé -->
+                                    <Text
+                                        id="cancellationStatusText"
+                                        text="{= ${IsCancelled} === 'X' ? 'Cancelled' : 'Not cancelled' }"/>
+
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+
+                </content>
+            </Panel>
+        </content>
+    </Page>
+    
+</mvc:View>

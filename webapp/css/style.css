@@ -1,0 +1,24 @@
+
+.dashTile { margin: 0 .5rem .5rem 0; }
+.dashPanel { margin-bottom: 1rem; }
+
+.customerTableResponsive {
+    width: 100%;
+}
+
+.customerTableResponsive .sapMListTbl {
+    width: 100%;
+    table-layout: auto;
+}
+
+.customerTableResponsive .sapMListTblCell,
+.customerTableResponsive .sapMListTblHeaderCell {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.customerTableResponsive .sapMText {
+    font-size: 0.75rem;
+}
