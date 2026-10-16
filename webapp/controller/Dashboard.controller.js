@@ -5,8 +5,10 @@ sap.ui.define([
     "sap/viz/ui5/controls/VizFrame",
     "sap/viz/ui5/data/FlattenedDataset",
     "sap/viz/ui5/controls/common/feeds/FeedItem",
-    "etudiant14/sap/training/helloworld/model/DataService"
-], function (Controller, JSONModel, DateFormat, VizFrame, FlattenedDataset, FeedItem, DataService) {
+    "etudiant14/sap/training/helloworld/model/DataService",
+    "sap/m/MessageBox",
+    "sap/m/Text"
+], function (Controller, JSONModel, DateFormat, VizFrame, FlattenedDataset, FeedItem, DataService, MessageBox, Text) {
     "use strict";
 
     var BLUE = "#4589dd", ORANGE = "#e8692a", GREEN = "#17a074", RED = "#e00b1b", LGREEN = "#3ba55d";
@@ -83,7 +85,11 @@ sap.ui.define([
                     return { Airline: k, Economy: n("Y"), Business: n("C"), First: n("F"), Total: mAir[k].length };
                 }).sort(function (x, y) { return y.Total - x.Total; });
                 this._chart("boxAirline", "stacked_column", "Airline", ["Economy", "Business", "First"], [BLUE, ORANGE, GREEN], aAir, {});
-            }.bind(this));
+            }.bind(this)).catch(function (e) {
+                /* eslint-disable no-console */
+                console.error("Dashboard: chargement impossible", e);
+                MessageBox.error("Impossible de charger les données du tableau de bord.\n" + (e && e.message ? e.message : e));
+            });
         },
 
         /**
@@ -92,7 +98,12 @@ sap.ui.define([
          */
         _chart: function (sBoxId, sType, sDim, aMeasures, aColors, aRows, oPlot, fnSelect) {
             var oBox = this.byId(sBoxId), bDonut = sType === "donut";
+            if (!oBox) { return; }
             oBox.destroyItems();
+            if (!aRows || !aRows.length) {
+                oBox.addItem(new Text({ text: "Aucune donnée" }));
+                return;
+            }
 
             var oViz = new VizFrame({
                 vizType: sType, width: "100%", height: "320px",
@@ -102,7 +113,9 @@ sap.ui.define([
                     plotArea: Object.assign({ colorPalette: aColors, dataLabel: { visible: true } }, oPlot)
                 }
             });
-            oViz.setModel(new JSONModel({ rows: aRows }));
+            var oModel = new JSONModel({ rows: aRows });
+            oModel.setSizeLimit(1000);
+            oViz.setModel(oModel);
             oViz.setDataset(new FlattenedDataset({
                 dimensions: [{ name: sDim, value: "{" + sDim + "}" }],
                 measures: aMeasures.map(function (m) { return { name: m, value: "{" + m + "}" }; }),
